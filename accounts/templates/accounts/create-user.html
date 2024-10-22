@@ -1,0 +1,27 @@
+{% extends "basic/form_basic.html" %}
+
+{% block title %}
+User Creation
+{% endblock title %}
+
+{% load static %}
+{% block style %}
+<link rel="stylesheet" href="{% static 'css/form_style.css' %}">
+{% endblock style %}
+
+
+{% block content %}
+<div class="container">
+    <div class="text-center mb-4">
+        <h2 class="text-dark">Create New</h2>
+        <small class="text-muted">Office Staff / Librarian / School Admin</small>
+    </div>
+    <form method="POST">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <div class="d-grid gap-2">
+            <button type="submit" class="btn btn-primary">Create User</button>
+        </div>
+    </form>
+</div>
+{% endblock %}

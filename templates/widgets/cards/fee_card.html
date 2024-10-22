@@ -1,0 +1,56 @@
+{% if fees %}
+<div class="row">
+    {% for fee in fees %}
+    <div class="col-md-6 col-lg-4 mb-4">
+        <div class="card border-dark h-100 shadow-sm">
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-items-start">
+                    <div class="user-details">
+                        <h5 class="card-title mb-1">{{ fee.student.full_name }}</h5>
+        
+                        <small class="text-muted d-block mb-2">Contact: {{ fee.student.contact_number }}</small>
+                        <p class="mb-1">
+                            <small class="text-muted">Class: {{ fee.student.class_name }}</small>,
+                            <small class="text-muted">Gender: {{ fee.student.gender }}</small>,
+                            <small class="text-muted">Age: {{ fee.student.age }}</small>
+                        </p>
+                        <small class="text-muted d-block" style="max-width: 200px;">Address: 
+                            {{ fee.student.address }}</small>
+                            <p class="mt-2 mb-1">
+                                <strong>Amount Due:</strong> ₹{{ fee.amount }}<br>
+                                <strong>Due Date:</strong> {{ fee.due_date|date:"F j, Y" }}<br>
+                                <strong>Status:
+                                    {% if fee.paid_status %}
+                                    Paid at {{ fee.payment_date|date:"F j, Y" }}
+                                    {% else %}
+                                    Pending
+                                    {% endif %}</strong>
+                            </p>
+                    </div>
+                    
+                    <div class="dropdown">
+                        <i class="fa-solid fa-ellipsis-vertical" type="button" id="dropdownMenuButton{{ fee.id }}"
+                            data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        </i>
+                        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownMenuButton{{ fee.id }}">
+                            <li><a class="dropdown-item" href="{% url 'edit_fee' fee.id %}">Edit</a></li>
+                            <li>
+                                <button type="button" class="dropdown-item text-danger" data-bs-toggle="modal"
+                                    data-bs-target="#deleteModal" data-fee-id="{{ fee.id }}"
+                                    data-fee-student="{{ fee.student.full_name }}" data-url-name="{% url 'delete_fee' fee.id %}">
+                                    Delete
+                                </button>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% else %}
+<div class="col-12">
+    <div class="alert alert-info text-center">No fee records found.</div>
+</div>
+{% endif %}

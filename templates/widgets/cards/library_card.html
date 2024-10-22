@@ -1,0 +1,57 @@
+{% if libraries %}
+<div class="row">
+    {% for library in libraries %}
+    <div class="col-md-6 col-lg-4 mb-4">
+        <div class="card border-dark h-100 shadow-sm">
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-items-start">
+                    <div class="user-details">
+                        <h5 class="card-title mb-1">{{ library.student.full_name }}</h5>
+
+                        <small class="text-muted d-block mb-2">Contact: {{ library.student.contact_number }}</small>
+                        <p class="mb-1">
+                            <small class="text-muted">Class: {{ library.student.class_name }}</small>,
+                            <small class="text-muted">Gender: {{ library.student.gender }}</small>,
+                            <small class="text-muted">Age: {{ library.student.age }}</small>
+                        </p>
+                        <small class="text-muted d-block" style="max-width: 200px;">Address:
+                            {{ library.student.address }}</small>
+                        <p class="mt-2 mb-1">
+                            <strong>book:</strong>{{ library.book }}<br>
+                            <strong>Due Date:</strong> {{ library.borrowed_on|date:"F j, Y" }}<br>
+                            <strong>Status:
+                                {% if library.return_status %}
+                                Paid at {{ library.returned_on|date:"F j, Y" }}
+                                {% else %}
+                                Pending
+                                {% endif %}</strong>
+                        </p>
+                    </div>
+
+                    <div class="dropdown">
+                        <i class="fa-solid fa-ellipsis-vertical" type="button" id="dropdownMenuButton{{ fee.id }}"
+                            data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        </i>
+                        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownMenuButton{{ fee.id }}">
+                            <li><a class="dropdown-item" href="{% url 'edit_library' library.id %}">Edit</a></li>
+                            <li>
+                                <button type="button" class="dropdown-item text-danger" data-bs-toggle="modal"
+                                    data-bs-target="#deleteModal" data-fee-id="{{ library.id }}"
+                                    data-fee-student="{{ library.title }}"
+                                    data-url-name="{% url 'delete_library' library.id %}">
+                                    Delete
+                                </button>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% else %}
+<div class="col-12">
+    <div class="alert alert-info text-center">No Library records found.</div>
+</div>
+{% endif %}

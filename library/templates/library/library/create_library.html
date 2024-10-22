@@ -1,0 +1,23 @@
+{% extends "basic/form_basic.html" %}
+
+{% block title %}
+Create New Library
+{% endblock title %}
+
+{% load static %}
+{% block style %}
+<link rel="stylesheet" href="{% static 'css/form_style.css' %}">
+{% endblock style %}
+
+{% block content %}
+<div class="container mb-5">
+    <div class="text-center">
+        <h2>Create New Library</h2>
+    </div>
+    <form method="POST">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit" class="btn btn-primary mt-3">Create Library</button>
+    </form>
+</div>
+{% endblock %}

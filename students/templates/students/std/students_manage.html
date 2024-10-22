@@ -1,0 +1,138 @@
+{% extends "basic/basic.html" %}
+{% block title %} Student Dashboard {% endblock title %}
+{% load static %}
+{% block style %} {% endblock style %}
+{% block content %}
+<div class="container">
+    <div class="row mb-4">
+        <div class="col-12 d-flex justify-content-center">
+            <h1 class="text-2xl font-bold text-center">Student Management</h1>
+        </div>
+    </div>
+
+    <div class="row mb-4 justify-content-end">
+        <div class="col-auto">
+            <a href="{% url 'create_student' %}" class="btn btn-primary">Add New Student</a>
+        </div>
+    </div>
+
+    <!-- Search Input -->
+    <div class="row mb-4">
+        <div class="col-md-2 mb-1">
+            <input type="text" id="search-input" class="form-control" placeholder="Search students..."
+                onkeyup="searchUsers()" />
+        </div>
+        <div class="col-md-4 mb-1">
+            <input type="text" id="address-filter" class="form-control" placeholder="Search Adress..."
+                onkeyup="searchUsers()" />
+        </div>
+        <div class="col-4 col-md-2 mb-1">
+            <select id="class-filter" class="form-control" onchange="searchUsers()">
+                <option value="">All Classes</option>
+                {% for cls in classlist %}
+                <option value="{{ cls.class_name }}">{{ cls.class_name }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <div class="col-4 col-md-2 mb-1">
+            <select id="gender-filter" class="form-control" onchange="searchUsers()">
+                <option value="">All Genders</option>
+                <option value="M">Male</option>
+                <option value="F">Female</option>
+                <option value="O">Others</option>
+            </select>
+        </div>
+        <div class="col-4 col-md-2 mb-1">
+            <input type="number" id="age-filter" class="form-control" placeholder="Age" onkeyup="searchUsers()" />
+        </div>
+    </div>
+
+    <div class="row" id="student-list">
+        {% include 'widgets/cards/student_card.html' with users=students %}
+    </div>
+</div>
+
+{% include 'widgets/delete_confirmation_modal.html' %}
+{% endblock %}
+
+{% block scripts %}
+<script src="{% static 'js/delete_confirmation_modal.js' %}"></script>
+<script>
+    function searchUsers() {
+        const query = document.getElementById("search-input").value;
+        const classFilter = document.getElementById("class-filter").value;
+        const genderFilter = document.getElementById("gender-filter").value;
+        const ageFilter = document.getElementById("age-filter").value;
+        const addressFilter = document.getElementById("address-filter").value;
+
+        const url = new URL("{% url 'search_student' %}", window.location.origin);
+        const params = {
+            q: query,
+            class: classFilter,
+            gender: genderFilter,
+            age: ageFilter,
+            address: addressFilter,
+        };
+
+        Object.keys(params).forEach(key => {
+            if (params[key]) {
+                url.searchParams.append(key, params[key]);
+            }
+        });
+
+        fetch(url)
+            .then((response) => response.json())
+            .then((data) => {
+                const userList = document.getElementById("student-list");
+                userList.innerHTML = ""; // Clear existing student list
+
+                if (data.users.length > 0) {
+                    data.users.forEach(function (user) {
+                        userList.innerHTML += `
+                        <div class="col-md-6 col-lg-4 mb-4">
+                            <div class="card border-dark h-100 shadow-sm">
+                                <div class="card-body">
+                                    <div class="d-flex justify-content-between align-items-start">
+                                        <div class="user-details">
+                                            <h5 class="card-title mb-1">${user.full_name}</h5>
+                                            <small class="text-muted d-block mb-2">${user.contact_number}</small>
+                                            <p class="mb-1">
+                                                <small class="text-muted">Class: ${user.class_name__class_name}</small>,
+                                                <small class="text-muted">Gender: ${user.gender}</small>,
+                                                <small class="text-muted">Age: ${user.age}</small>
+                                            </p>
+                                            <small class="text-muted d-block" style="max-width: 200px;">Address: ${user.address}</small>
+                                        </div>
+                                        <div class="dropdown">
+                                            <i class="fa-solid fa-ellipsis-vertical" type="button" id="dropdownMenuButton${user.id}"
+                                                data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                            </i>
+                                            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownMenuButton${user.id}">
+                                                <li><a class="dropdown-item" href="/students/${user.id}/edit">Edit</a></li>
+                                                <li>
+                                                    <button type="button" class="dropdown-item text-danger" data-bs-toggle="modal"
+                                                        data-bs-target="#deleteModal" data-user-id="${user.id}"
+                                                        data-user-name="${user.full_name}" data-url-name="/students/${user.id}/delete">
+                                                        Delete
+                                                    </button>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>`;
+                    });
+                } else {
+                    userList.innerHTML = `
+                    <div class="col-12">
+                        <div class="alert alert-info text-center">No students found.</div>
+                    </div>`;
+                }
+            })
+            .catch((error) => {
+                console.error('Error fetching students:', error);
+            });
+    }
+</script>
+{% endblock scripts %}

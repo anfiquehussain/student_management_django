@@ -1,0 +1,29 @@
+{% extends "basic/form_basic.html" %}
+
+{% block title %}
+User Edit
+{% endblock title %}
+
+{% load static %}
+{% block style %}
+<link rel="stylesheet" href="{% static 'css/form_style.css' %}">
+{% endblock style %}
+
+
+{% block content %}
+<div class="container">
+    <h2 class="text-center text-dark">Edit {{ user }}</h2> 
+    <form method="POST">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <div class="form-group">
+            <label for="id_password">Password (leave blank to keep current password)</label>
+            <input type="password" name="password" class="form-control" id="id_password"
+                placeholder="Enter new password">
+        </div>
+        <div class="d-grid gap-2 mt-3">
+            <button type="submit" class="btn btn-primary">Update User</button>
+        </div>
+    </form>
+</div>
+{% endblock %}

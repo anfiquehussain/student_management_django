@@ -1,0 +1,86 @@
+{% extends "basic/basic.html" %}
+{% load static %}
+{% block title %}
+Book Management
+{% endblock title %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2 class="text-center mb-4">Book List</h2>
+    <a href="{% url 'create_book' %}" class="btn btn-secondary d-block ms-auto mb-4">Add New Staff</a>
+
+    <div class="row">
+        <div class="col-md-6">
+
+            <input type="text" id="search-title" placeholder="Search by title" class="form-control mb-4" />
+        </div>
+        <div class="col-md-6">
+            <input type="text" id="search-author" placeholder="Search by author" class="form-control mb-4" />
+        </div>
+    </div>
+
+    <div class="row" id="book-list">
+        {% include 'widgets/cards/book_card.html' with books=books %}
+    </div>
+</div>
+
+
+{% include 'widgets/delete_confirmation_modal.html' %}
+{% endblock content %}
+{% block scripts %}
+<script>
+        document.getElementById('search-title').addEventListener('input', searchBooks);
+        document.getElementById('search-author').addEventListener('input', searchBooks);
+
+        function searchBooks() {
+        var title = document.getElementById('search-title').value;
+        var author = document.getElementById('search-author').value;
+
+        fetch(`{% url 'search_book' %}?title=${title}&author=${author}`)
+            .then(response => response.json())
+            .then(data => {
+                const bookList = document.getElementById('book-list');
+        bookList.innerHTML = ''; // Clear existing book list
+
+                if (data.books.length > 0) {
+            data.books.forEach(function (book) {
+                bookList.innerHTML += `
+                        <div class="col-md-6 col-lg-4 mb-4">
+                            <div class="card border-dark">
+                                <div class="card-body">
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <div>
+                                            <h5 class="card-title mb-0">${book.title}</h5>
+                                            <small class="text-muted">${book.author}</small>
+                                        </div>
+                                        <div class="dropdown">
+                                            <i class="fa-solid fa-ellipsis-vertical" type="button" id="dropdownMenuButton${book.id}"
+                                                data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                            </i>
+                                            <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton${book.id}">
+                                                <li><a class="dropdown-item" href="book/${book.id}/edit">Edit</a></li>
+                                                <li>
+                                                    <button type="button" class="dropdown-item text-danger" data-bs-toggle="modal"
+                                                        data-bs-target="#deleteModal" data-book-id="${book.id}"
+                                                        data-book-name="${book.title}" data-url-name="book/${book.id}/delete">
+                                                        Delete
+                                                    </button>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>`;
+            });
+                } else {
+            bookList.innerHTML = `
+                        <div class="col-12">
+                            <div class="alert alert-info text-center">No Book found.</div>
+                        </div>`;
+                }
+            });
+    }
+</script>
+<script src="{% static 'js/delete_confirmation_modal.js' %}"></script>
+{% endblock scripts %}

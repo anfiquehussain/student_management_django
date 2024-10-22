@@ -1,0 +1,22 @@
+{% extends "basic/form_basic.html" %}
+
+{% block title %}
+OnBoarding - Student Management
+{% endblock title %}
+
+{% load static %}
+{% block style %}
+<link rel="stylesheet" href="{% static 'css/form_style.css' %}">
+{% endblock style %}
+
+{% block content %}
+<div class="container">
+    <h2>Login</h2>
+    <form method="POST">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit" class="btn btn-primary">Login</button>
+    </form>
+    <p class="footer-text">School Management System</p>
+</div>
+{% endblock %}

@@ -1,0 +1,25 @@
+{% extends "basic/basic.html" %}
+
+{% block title %}
+Admin Dashboard
+{% endblock title %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="row mb-4">
+        <div class="col-12 text-center">
+            <h1 class="text-2xl font-bold">Admin Dashboard</h1>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-12 mb-4">
+            {% include 'widgets/cards/overview_card.html' with header='Overview' total_students=student_count total_staff=officestaff_count total_librarians=librarian_count total_admin=admin_count%}
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-12 mb-4">
+            {% include 'widgets/cards/admin_manage_card.html' with header='User Manage' %}
+        </div>
+    </div>
+</div>
+{% endblock %}

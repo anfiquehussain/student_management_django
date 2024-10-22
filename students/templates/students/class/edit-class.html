@@ -1,0 +1,25 @@
+{% extends "basic/form_basic.html" %}
+
+{% block title %}
+Edit Class
+{% endblock title %}
+
+{% load static %}
+{% block style %}
+<link rel="stylesheet" href="{% static 'css/form_style.css' %}">
+{% endblock style %}
+
+
+{% block content %}
+<div class="container ">
+    <h2 class="text-center">Edit @{{ user }}</h2>
+    <form method="POST">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit" class="btn btn-primary btn-block mt-3">Update User</button>
+    </form>
+</div>
+
+
+
+{% endblock %}

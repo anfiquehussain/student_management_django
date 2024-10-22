@@ -1,0 +1,24 @@
+{% extends "basic/form_basic.html" %}
+
+{% block title %}
+Create New Book
+{% endblock title %}
+
+{% block style %}
+{% load static %}
+{% block style %}
+<link rel="stylesheet" href="{% static 'css/form_style.css' %}">
+{% endblock style %}
+
+{% block content %}
+<div class="container mb-5">
+    <div class="text-center">
+        <h2>Create New Book</h2>
+    </div>
+    <form method="POST">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit" class="btn btn-primary mt-3">Create Book</button>
+    </form>
+</div>
+{% endblock %}

@@ -1,0 +1,34 @@
+{% if classes %}
+{% for class in classes %}
+<div class="col-md-6 col-lg-4 mb-4">
+    <div class="card border-dark">
+        <div class="card-body">
+            <div class="d-flex justify-content-between align-items-center">
+                <h5 class="card-title mb-0">{{ class.class_name }}</h5>
+                <div class="dropdown">
+                    <i class="fa-solid fa-ellipsis-vertical" type="button" id="dropdownMenuButton{{ class.id }}"
+                        data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    </i>
+
+                    <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton{{ class.id }}">
+                        <li><a class="dropdown-item" href="{% url 'class_edit' class.id %}">Edit</a></li>
+                        <li>
+                            <button type="button" class="dropdown-item text-danger" data-bs-toggle="modal"
+                                data-bs-target="#deleteModal" data-user-id="{{ class.id }}"
+                                data-user-name="{{ class.class_name }}" aria-label="Delete {{ class.class_name }}"
+                                data-url-name="{% url 'class_delete' class.id %}">
+                                Delete
+                            </button>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endfor %}
+{% else %}
+<div class="col-12">
+    <div class="alert alert-info text-center">No classes available.</div>
+</div>
+{% endif %}

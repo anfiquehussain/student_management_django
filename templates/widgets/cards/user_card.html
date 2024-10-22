@@ -1,0 +1,35 @@
+{% if users %}
+{% for user in users %}
+<div class="col-md-6 col-lg-4 mb-4">
+    <div class="card border-dark">
+        <div class="card-body">
+            <div class="d-flex justify-content-between align-items-center">
+                <div>
+                    <h5 class="card-title mb-0">{{ user.username }}</h5>
+                    <small class="text-muted">{{ user.email }}</small>
+                </div>
+                <div class="dropdown">
+                    <i class="fa-solid fa-ellipsis-vertical" type="button" id="dropdownMenuButton{{ user.id }}"
+                        data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    </i>
+                    <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton{{ user.id }}">
+                        <li><a class="dropdown-item" href="{% url 'user-edit' user.id %}">Edit</a></li>
+                        <li>
+                            <button type="button" class="dropdown-item text-danger" data-bs-toggle="modal"
+                                data-bs-target="#deleteModal" data-user-id="{{ user.id }}"
+                                data-user-name="{{ user.username }}" data-url-name="{% url 'user-delete' user.id %}">
+                                Delete
+                            </button>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endfor %}
+{% else %}
+<div class="col-12">
+    <div class="alert alert-info text-center">No staffs found.</div>
+</div>
+{% endif %}

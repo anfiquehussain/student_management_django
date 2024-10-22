@@ -1,0 +1,47 @@
+{% extends "basic\basic.html" %}
+
+
+{% block title %}
+Student Dashboard
+{% endblock title %}
+
+
+{% load static %}
+{% block style %}
+
+{% endblock style %}
+
+
+{% block content %}
+<div class="container">
+    <div class="row">
+        <div class="col-12 flex justify-center items-center">
+            <h1 class="text-2xl font-bold text-center">Student Management</h1>
+        </div>
+        <div class="col-12">
+            <div class="flex justify-center items-center mb-3">
+                {% include "widgets/cards/student_overview_card.html" with header="Overview"%}
+            </div>
+        </div>
+
+        <div class="col-12 col-md-6 col-lg-3 mb-2">
+                {% include "widgets/cards/nav_card.html" with header="Manage Class" sub='Create, delete, and update classes effortlessly.'  url='class_manage'%}
+        </div>
+
+        <div class="col-12 col-md-6 col-lg-3 mb-2">
+                {% include "widgets/cards/nav_card.html" with header="Manage Students" sub='Create, delete, and update Students effortlessly' url='student_manage'%}
+            </div>
+        <div class="col-12 col-md-6 col-lg-3 mb-2">
+                {% include "widgets/cards/nav_card.html" with header="Manage Fee" sub='Create, delete, and update Fee Status effortlessly.' url='fee'%}
+        </div>
+        <div class="col-12 col-md-6 col-lg-3 mb-2">
+                {% include "widgets/cards/nav_card.html" with header="Library History" sub='Create, delete, and update Fee Status effortlessly.' url='fee'%}
+        </div>
+    </div>
+</div>
+{% include 'widgets/delete_confirmation_modal.html' %}
+{% endblock %}
+
+{% block scripts %}
+<script src="{% static 'js/delete_confirmation_modal.js' %}"></script>
+{% endblock scripts %}

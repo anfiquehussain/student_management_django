@@ -1,0 +1,52 @@
+{% extends "basic/basic.html" %}
+{% load static %}
+{% block title %}
+Class Management
+{% endblock title %}
+
+{% block content %}
+<div class="container mt-5">
+    <!-- Button to Add New Class -->
+    <div class="row mb-4 justify-content-end">
+        <div class="col-auto">
+            <a href="{% url 'class_create' %}" class="btn btn-primary">Add New Class</a>
+        </div>
+    </div>
+
+    <!-- Search Input -->
+    <div class="row mb-4">
+        <div class="col">
+            <input type="text" id="search-input" class="form-control" placeholder="Search classes..."
+                onkeyup="searchClasses()">
+        </div>
+    </div>
+
+    <!-- Class Cards -->
+    <div class="row" id="class-list">
+        {% include 'widgets/cards/class_card.html' with classes=classes %}
+    </div>
+</div>
+
+<!-- Include the Modal for delete confirmation -->
+{% include 'widgets/delete_confirmation_modal.html' %}
+{% endblock content %}
+
+{% block scripts %}
+<script src="{% static 'js/delete_confirmation_modal.js' %}"></script>
+<script>
+    // Real-time search functionality
+    function searchClasses() {
+        const query = document.getElementById('search-input').value.toLowerCase();
+        const classList = document.getElementById('class-list').children;
+
+        for (let i = 0; i < classList.length; i++) {
+            const classItem = classList[i].querySelector('.card-title').textContent.toLowerCase();
+            if (classItem.includes(query)) {
+                classList[i].style.display = '';
+            } else {
+                classList[i].style.display = 'none';
+            }
+        }
+    }
+</script>
+{% endblock scripts %}
