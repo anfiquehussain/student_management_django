@@ -1,11 +1,10 @@
 {% extends "basic/form_basic.html" %}
+{% load static %}
 
 {% block title %}
 Create New Book
 {% endblock title %}
 
-{% block style %}
-{% load static %}
 {% block style %}
 <link rel="stylesheet" href="{% static 'css/form_style.css' %}">
 {% endblock style %}
@@ -21,4 +20,4 @@ Create New Book
         <button type="submit" class="btn btn-primary mt-3">Create Book</button>
     </form>
 </div>
-{% endblock %}
+{% endblock content %}

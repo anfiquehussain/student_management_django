@@ -170,3 +170,4 @@ class BookSearchView(ListView):
         books_data = list(books.values('id', 'title', 'author'))  # Convert queryset to list of dictionaries
 
         return JsonResponse({'books': books_data})
+
